@@ -8,6 +8,9 @@ class Note(CoreModel):
     body: Optional[str]
     tags: Optional[List[str]]
 
+    class Config:
+        orm_mode = True    
+
 class NoteCreate(CoreModel):
     title: str = Field(...)
     body: str = Field(...)
@@ -15,3 +18,7 @@ class NoteCreate(CoreModel):
 
 class NoteUpdate(CoreModel, IDModelMixin):
     data: Note
+
+class NoteInDB(Note):
+    id: int
+    user_id: int
