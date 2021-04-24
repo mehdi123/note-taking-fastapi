@@ -17,3 +17,4 @@ pyjwt
 passlib
 fastapi_mail
 bcrypt
+fastapi-pagination

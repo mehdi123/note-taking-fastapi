@@ -7,6 +7,9 @@ config = Config(".env")
 PROJECT_NAME = "note-taking"
 VERSION = "1.0.0"
 API_PREFIX = "/api/v1"
+API_AUTH_PREFIX="/auth"
+API_NOTE_PREFIX="/note"
+API_ADMIN_PREFIX="/admin"
 
 SECRET_KEY = config("SECRET_KEY", cast=Secret, default="CHANGEIT")
 

@@ -6,9 +6,9 @@ from app.utils.email import send_email
 from app.core.users import get_current_user
 from app.schemas.user import User, UserLogin, UserToken, BaseResponse, UserPasswordChange, UserInDB
 from app.utils.hash import verify_code, verify_password
-from app.core.config import ACCESS_TOKEN_EXPIRE_SECONDS
+from app.core.config import ACCESS_TOKEN_EXPIRE_SECONDS, API_PREFIX, API_AUTH_PREFIX
 
-router = APIRouter()
+router = APIRouter(prefix=API_AUTH_PREFIX)
 
 @router.post("/register", response_model=BaseResponse)
 async def register(request: Request, user: User, background_tasks: BackgroundTasks):
@@ -22,7 +22,7 @@ async def register(request: Request, user: User, background_tasks: BackgroundTas
     user_id, verification_code = await UserTableHandler.add(user)
     if user_id:
         await send_email([user.email], 
-                        f"{request.base_url}api/auth/verify?user_id={user_id}&code={verification_code}",
+                        f"{request.base_url}{API_PREFIX[1:]}{API_AUTH_PREFIX}/verify?user_id={user_id}&code={verification_code}",
                         background_tasks)
         return {"success": True, "message": "The user has been created and a verification message has been sent"}
     else:

@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi_pagination import add_pagination
 
 from app.core import config, tasks  
 
@@ -22,6 +23,8 @@ def get_application():
     bind_event_handlers(app)
     app.include_router(api_router, prefix=config.API_PREFIX)
 
+    add_pagination(app)
+    
     return app
 
 
