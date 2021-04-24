@@ -80,5 +80,6 @@ class NotesTableHandler:
         """
         query = notes.select()
         for tag in tags:
-            query = query.where(notes.c.tags.like(f"%,{tag} %"))
+            query = query.where(notes.c.tags.like(f"%{tag}%"))
+        print(query)
         return await paginate(database, query)

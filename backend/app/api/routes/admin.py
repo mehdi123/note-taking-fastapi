@@ -10,7 +10,7 @@ from app.core.config import API_ADMIN_PREFIX
 
 router = APIRouter(prefix=API_ADMIN_PREFIX)
 
-@router.get("/search", response_model=Page[Note])
+@router.post("/search", response_model=Page[Note])
 async def search_tags(tags: List[str], user: UserInDB = Depends(get_current_user)):
     """
         Search notes based on keyword

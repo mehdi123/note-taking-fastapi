@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends, Request, BackgroundTasks
+from typing import Any
 
 from app.utils.jwt import signJWT
 from app.db.user import UserTableHandler
@@ -10,7 +11,7 @@ from app.core.config import ACCESS_TOKEN_EXPIRE_SECONDS, API_PREFIX, API_AUTH_PR
 
 router = APIRouter(prefix=API_AUTH_PREFIX)
 
-@router.post("/register", response_model=BaseResponse)
+@router.post("/register", response_model=Any)
 async def register(request: Request, user: User, background_tasks: BackgroundTasks):
     """
         registers the new user and sends verification email in background
@@ -24,7 +25,9 @@ async def register(request: Request, user: User, background_tasks: BackgroundTas
         await send_email([user.email], 
                         f"{request.base_url}{API_PREFIX[1:]}{API_AUTH_PREFIX}/verify?user_id={user_id}&code={verification_code}",
                         background_tasks)
-        return {"success": True, "message": "The user has been created and a verification message has been sent"}
+        return {"success": True, 
+                "message": "The user has been created and a verification message has been sent", 
+                "user_id": user_id}
     else:
         raise HTTPException(status_code=400, detail="The user couldn't be created")
 
