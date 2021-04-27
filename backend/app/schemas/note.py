@@ -22,3 +22,7 @@ class NoteUpdate(CoreModel, IDModelMixin):
 class NoteInDB(Note):
     id: int
     user_id: int
+
+class NotesStats(CoreModel):
+    notes: int
+    tags: int
