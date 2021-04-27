@@ -248,12 +248,14 @@ class NoteTagTableHandler:
     @exc_handler()
     async def get_notes_by_tag(tag: str) -> List[NoteInDB]:
         tag_record = await TagsTableHandler.get_tag_by_name(tag)
-        note_ids = await db.fetch_all(
-            note_tag.select().where(note_tag.c.tag_id == tag_record.get('id'))
-        )
-        return [
-            await NotesTableHandler.get_note_by_id(note_id.get('note_id')) for note_id in note_ids
-        ]
+        if tag_record:
+            note_ids = await db.fetch_all(
+                note_tag.select().where(note_tag.c.tag_id == tag_record.get('id'))
+            )
+            return [
+                await NotesTableHandler.get_note_by_id(note_id.get('note_id')) for note_id in note_ids
+            ]
+        return []
 
     @staticmethod
     @exc_handler()

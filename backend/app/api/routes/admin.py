@@ -24,7 +24,7 @@ async def search_tags(tags: List[str], user: UserInDB = Depends(get_current_user
 @router.get("/stats", response_model=NotesStats)
 async def get_stats(user: UserInDB = Depends(get_current_user)):
     """
-        Gets stats of the notes
+        Gets stats of the notes; notes and tags counts
     """
 
     if not user.is_superuser:

@@ -7,6 +7,9 @@ from app.core import config, tasks
 from app.api.routes import router as api_router
 
 def bind_event_handlers(app: FastAPI):
+    """
+        bind start/stop handlers
+    """
     app.add_event_handler("startup", tasks.create_start_app_handler(app))
     app.add_event_handler("shutdown", tasks.create_stop_app_handler(app))
 
