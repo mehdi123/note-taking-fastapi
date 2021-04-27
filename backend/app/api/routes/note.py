@@ -16,19 +16,9 @@ async def create_note(note: NoteCreate, user: UserInDB = Depends(get_current_use
         Creates a note record for the current user and returns the new record
     """
 
-    result = await NotesTableHandler.add(note, user.id)
-    if result:
-        note_in_db = NoteInDB(title=result.get('title'),
-                            body=result.get('body'),
-                            tags=list(
-                                    map(
-                                        lambda x: x.strip(), 
-                                        result.get('tags').split(',')
-                                    )
-                                ),
-                            id=result.get('id'),
-                            user_id=result.get('user_id'))
-        return note_in_db
+    note_id = await NotesTableHandler.add(note, user.id)
+    if note_id:
+        return {**note.dict(), "id": note_id, "user_id": user.id}
     else:
         return {"success": False, "message": "Note not created"}
 
@@ -41,15 +31,10 @@ async def update_note(note: NoteUpdate, user: UserInDB = Depends(get_current_use
     if result:
         note_in_db = NoteInDB(title=result.get('title'),
                             body=result.get('body'),
-                            tags=list(
-                                    map(
-                                        lambda x: x.strip(), 
-                                        result.get('tags').split(',')
-                                    )
-                                ),
+                            tags=result.get('tags'),
                             id=result.get('id'),
                             user_id=result.get('user_id'))
-        return note_in_db        
+        return note_in_db
     else:
         return {"success": False, "message": "No such note with the provided id"}
 
